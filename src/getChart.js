@@ -106,7 +106,7 @@ function addLayer(layer, map) {
     layer.addTo(map);
 }
 
-export default function getChart(){
+export default function getChart() {   
     fetch('https://open-covid-19.github.io/data/data_latest.json')
         .then(response=>response.json())
         .then(data => {
@@ -118,7 +118,7 @@ export default function getChart(){
             let map = new L.map('map',mapOptions);
         
             let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-                noWrap:true,
+                noWrap:false,
                 bounds:[
                     [-90,-180],
                     [90,180]
@@ -147,7 +147,10 @@ export default function getChart(){
                     }
                 )
                 .bindPopup(`${value.RegionName}\n${value.Latitude},${value.Longitude}`);
-                return circle;
+                return {
+                    circle: circle,
+                    date: value.Date
+                };
             });
             const dateDiv = document.getElementById('date');
             //use button to move forward using each data
@@ -162,24 +165,15 @@ export default function getChart(){
                 }
             }
 
-            // geocoder.geosearch().addTo(map);
-            // let geocoder = esri.Geocoding.geocodeService();
-
-            // geocoder.geocode().text('New York City').run(function (error, response) {
-            //     if (error) {
-            //         return;
-            //     }
-            //     map.fitBounds(response.results[0].bounds);
-            // });
             //Create coordinate circle functions
             let mappedArray = function () {
                 return circleArray.map((value, index) => {
                     let mappedLayers =  (function (index) {
                         let mapping = setInterval(function () {
                                 if (stopPlaceMapping === false) {
-                                    addLayer(value, map);
+                                    addLayer(value.circle, map);
                                 }
-                            }, 700 * index)
+                            }, 1 * index)
                             return mapping;
                     })(index)
                     
@@ -226,6 +220,6 @@ export default function getChart(){
             let deaths500 = countryDeath500.map(value=>value[1]);
             let ctx = document.getElementById('myChart');
 
-            makeChart(ctx, countries500,deaths500);
+            //makeChart(ctx, countries500,deaths500);
         })
 }

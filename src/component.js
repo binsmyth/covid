@@ -1,6 +1,8 @@
 export default (id,tag,inHtml)=>{
     const element = document.createElement(tag);
     element.id = id;
-    element.innerHTML = inHtml;
+    if (inHtml !== undefined) {
+        element.innerHTML = inHtml;
+    }
     return element;
 }
