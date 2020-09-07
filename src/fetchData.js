@@ -2,9 +2,8 @@
     addCircleToMap does too many things refactor it.
     Refactor Map methods to different place
 */
-import { addCircleToMap } from './addCircleToMap';
-import { createMap } from './mapUtilities';
-import { createLayer } from './mapUtilities';
+
+import { createMap , createLayer ,addCircleToMap} from './mapUtilities';
 
 //A function to fetch data from local json file
 export function fetchEpidemiologyData() {
@@ -28,9 +27,7 @@ export async function fetchData() {
     
     const map = createMap();
     const layer = createLayer();
-
     map.addLayer(layer);
-
 
     let circle = [];
     let covidDate = [];
