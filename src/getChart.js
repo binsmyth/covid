@@ -1,7 +1,5 @@
 import Chart from 'chart.js';
 import 'chartjs-plugin-zoom';
-import * as esri from 'esri-leaflet';
-import * as geocoder from 'esri-leaflet-geocoder';
 
 function makeChart(ctx, yLabel, xData){
     let myChart = new Chart(ctx,{

@@ -1,13 +1,13 @@
 import component from './component';
 import getChart from './getChart';
-import {fetchData} from './fetchData';
+import {addCovidDataToMap} from './mapUtilities';
 
 import "./main.css";
 import "./../node_modules/leaflet/dist/leaflet.css";
 import l from "leaflet";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-fetchData();
+addCovidDataToMap();
 
 let chartContainer = component("chart-container", "div");
 chartContainer.appendChild(component("myChart", "canvas"));
