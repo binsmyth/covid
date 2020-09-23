@@ -5,7 +5,7 @@ exports.devServer = ({ host, port } = {}) => ({
         stats: "errors-only",
         host,
         port: 8082,
-        open: true,
+        open: 'chrome',
         overlay: true,
     }
 });

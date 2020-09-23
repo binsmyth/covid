@@ -1,7 +1,7 @@
 //TODO: simplify makeCircleArray
 
 
-import { fetchEpidemiologyData, fetchGeographyData } from './fetchData';
+import { fetchEpidemiologyData, fetchGeographyData, fetchVicLgaGeoJSON } from './fetchData';
 
 //Creating new map
 export const createMap = () => {
@@ -19,19 +19,24 @@ export const createMap = () => {
 
 //This is used to create a layer of map image
 export const createLayer = () => {
-    let layer = new L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=sk.eyJ1IjoiYmluc215dGgiLCJhIjoiY2tmNWxsNXBvMG9hYTMzbnNmMjVnMnZqcSJ9.OZ5ygR5_8tpmOVjCLDs8nA', {
+    let layer = new L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmluc215dGgiLCJhIjoiY2tlc240OHkyMW5zaTJzcG53ZmVjcW9jZiJ9.S0iygkdSP5_VWreKBlDaJQ', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
         tileSize: 512,
         maxZoom: 18,
         zoomOffset: -1,
         id: 'mapbox/streets-v11',
-        accessToken: 'sk.eyJ1IjoiYmluc215dGgiLCJhIjoiY2tmNWxsNXBvMG9hYTMzbnNmMjVnMnZqcSJ9.OZ5ygR5_8tpmOVjCLDs8nA'
+        accessToken: 'pk.eyJ1IjoiYmluc215dGgiLCJhIjoiY2tlc240OHkyMW5zaTJzcG53ZmVjcW9jZiJ9.S0iygkdSP5_VWreKBlDaJQ'
     });
     return layer;
 }
 
+const createVicLgaGeojsonLayer = () => {
+    var geojsonLayer = fetchVicLgaGeoJSON();     
+    return geojsonLayer;
+}
+
 //Adds Covid deaths to map
-export const addCircleToMap = (circleArray,map,covidDate) =>{
+export const addCircleToMap = (circleArray, map, covidDate) => {
     const covidDateDiv = document.querySelector('#date');
     let i = 0;
     let mappedLayers =  (function (i) {
@@ -76,15 +81,30 @@ export const makeCovidDateArray = (epidemiologyData, geographyData) => {
     .filter(value=>value !== undefined)
 }
 
-export async function addCovidDataToMap() {
+export async function addCovidDataToMap() {//TODO:This is an async function and has too many functions inside.
     let geographyData = await fetchGeographyData();
+    
     let epidemiologyData = await fetchEpidemiologyData();
     let circle = makeCircleArray(epidemiologyData, geographyData);
-    
+    console.log(geographyData);
     let covidDate = makeCovidDateArray(epidemiologyData, geographyData);
-    
+    // console.log(await fetchEpidemiologyData());
     const map = createMap();
     const layer = createLayer();
+    const geoJSONLayer = createVicLgaGeojsonLayer();
+    const vicLgaStyles = {
+        "color": "#000",
+        "weight": 1,
+        "opacity": 0.4,
+        "fillColor": "#e4ebf7"
+    };
+
+    geoJSONLayer.then(data => {
+        L.geoJSON(data, {
+            style: vicLgaStyles
+        }).addTo(map);
+    });
     map.addLayer(layer);
+    // addCircleToMap(circle, map, covidDate)
     let intervalId = addCircleToMap(circle, map, covidDate);
 }
