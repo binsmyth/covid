@@ -33,6 +33,7 @@
     "esri-leaflet-geocoder": "^2.3.2",
     "event-stream": "^4.0.1",
     "leaflet": "^1.6.0",
-    "leaflet-plugin-trackplayback": "^1.0.5"
+    "leaflet-plugin-trackplayback": "^1.0.5",
+    "tailwindcss": "^1.8.10"
   }
 }
