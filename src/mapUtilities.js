@@ -83,28 +83,29 @@ export const makeCovidDateArray = (epidemiologyData, geographyData) => {
 
 export async function addCovidDataToMap() {//TODO:This is an async function and has too many functions inside.
     let geographyData = await fetchGeographyData();
-    
     let epidemiologyData = await fetchEpidemiologyData();
+
     let circle = makeCircleArray(epidemiologyData, geographyData);
-    console.log(geographyData);
+    // console.log(geographyData);
     let covidDate = makeCovidDateArray(epidemiologyData, geographyData);
     // console.log(await fetchEpidemiologyData());
     const map = createMap();
     const layer = createLayer();
-    const geoJSONLayer = createVicLgaGeojsonLayer();
-    const vicLgaStyles = {
-        "color": "#000",
-        "weight": 1,
-        "opacity": 0.4,
-        "fillColor": "#e4ebf7"
-    };
+    
+    // const geoJSONLayer = createVicLgaGeojsonLayer();
+    // const vicLgaStyles = {
+    //     "color": "#000",
+    //     "weight": 1,
+    //     "opacity": 0.4,
+    //     "fillColor": "#e4ebf7"
+    // };
 
-    geoJSONLayer.then(data => {
-        L.geoJSON(data, {
-            style: vicLgaStyles
-        }).addTo(map);
-    });
+    // geoJSONLayer.then(data => {
+    //     L.geoJSON(data, {
+    //         style: vicLgaStyles
+    //     }).addTo(map);
+    // });
     map.addLayer(layer);
     // addCircleToMap(circle, map, covidDate)
-    let intervalId = addCircleToMap(circle, map, covidDate);
+    // let intervalId = addCircleToMap(circle, map, covidDate);
 }

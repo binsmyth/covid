@@ -6,12 +6,9 @@
 import { removeArrayWithNull, changeArrayKeyObj } from './libs/libs';
 //A function to fetch data from local json file
 export async function fetchEpidemiologyData() {//TODO Change this fetch method to use cached data
-    // const fetchEpidemiologyDataFromCache = await caches.match('https://storage.googleapis.com/covid19-open-data/v2/epidemiology.json');
-    // let epidemiologyData = (await fetchEpidemiologyDataFromCache.json()).data;
-    // return epidemiologyData;
-    return fetch('https://storage.googleapis.com/covid19-open-data/v2/epidemiology.json')
-        .then(epidemiologyResult => epidemiologyResult.json())
-        .then(epidemiologyData=>epidemiologyData.data)
+    const fetchEpidemiologyDataFromCache = await caches.match('./data/epidemiology.json');
+    let epidemiologyData = (await fetchEpidemiologyDataFromCache.json()).data;
+    return epidemiologyData;
 }
 
 //A function to fetch and save to cache
@@ -22,18 +19,18 @@ const fetchToCache = cacheName => async (url) => {
     if (lengthOfCache === 0) cache.add(url);
 }
 
-const epidemiologyUrl = 'https://storage.googleapis.com/covid19-open-data/v2/epidemiology.json';
+const epidemiologyUrl = './data/epidemiology.json';
 const  geographyUrl = './data/geography.json';
 
 //Fetching geography and epidemiology cache
 export const fetchGeographyCache = () => fetchToCache('geography-cache')(geographyUrl);
 export const fetchEpidemiologyCache = () => fetchToCache('epidemiology-cache')(epidemiologyUrl);
 
-export function fetchGeographyData() {
-    return fetch('./data/geography.json')
-        .then(geographyResult => geographyResult.json())
-        .then(result=>removeArrayWithNull(result.data))
-        .then(arr => changeArrayKeyObj(arr))
+export async function fetchGeographyData() {
+    const fetchEpidemiologyDataFromCache = await caches.match('./data/geography.json');
+    let rawGeographyData = (await fetchEpidemiologyDataFromCache.json()).data;
+    let geographyData = changeArrayKeyObj(removeArrayWithNull(rawGeographyData));
+    return geographyData;
 }
 
 export function fetchVicLgaGeoJSON() {
