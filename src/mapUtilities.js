@@ -2,7 +2,7 @@
 
 
 import { fetchEpidemiologyData, fetchGeographyData, fetchVicLgaGeoJSON } from './fetchData';
-
+import {addMonths} from './libs/libs';
 //Creating new map
 export const createMap = () => {
     let mapOptions = {
@@ -84,10 +84,11 @@ export const makeCovidDateArray = (epidemiologyData, geographyData) => {
 export async function addCovidDataToMap() {//TODO:This is an async function and has too many functions inside.
     let geographyData = await fetchGeographyData();
     let epidemiologyData = await fetchEpidemiologyData();
-
-    let circle = makeCircleArray(epidemiologyData, geographyData);
+    console.log(geographyData);
+    console.log(addMonths(new Date(epidemiologyData[0][0]),1));
+    // let circle = makeCircleArray(epidemiologyData, geographyData);
     // console.log(geographyData);
-    let covidDate = makeCovidDateArray(epidemiologyData, geographyData);
+    // let covidDate = makeCovidDateArray(epidemiologyData, geographyData);
     // console.log(await fetchEpidemiologyData());
     const map = createMap();
     const layer = createLayer();
