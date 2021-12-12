@@ -6,7 +6,7 @@
 import { removeArrayWithNull, changeArrayKeyObj } from './libs/libs';
 //A function to fetch data from local json file
 export async function fetchEpidemiologyData() {//TODO Change this fetch method to use cached data
-    const fetchEpidemiologyDataFromCache = await caches.match('./data/epidemiology.json');
+    const fetchEpidemiologyDataFromCache = await fetch('./data/epidemiology.json');
     let epidemiologyData = (await fetchEpidemiologyDataFromCache.json()).data;
     return epidemiologyData;
 }
@@ -27,7 +27,7 @@ export const fetchGeographyCache = () => fetchToCache('geography-cache')(geograp
 export const fetchEpidemiologyCache = () => fetchToCache('epidemiology-cache')(epidemiologyUrl);
 
 export async function fetchGeographyData() {
-    const fetchEpidemiologyDataFromCache = await caches.match('./data/geography.json');
+    const fetchEpidemiologyDataFromCache = await fetch('./data/geography.json');
     let rawGeographyData = (await fetchEpidemiologyDataFromCache.json()).data;
     let geographyData = changeArrayKeyObj(removeArrayWithNull(rawGeographyData));
     return geographyData;
